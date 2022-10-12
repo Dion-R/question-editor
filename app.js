@@ -84,15 +84,21 @@ function setQuestion(e) {
         </div>`;
     cont.questionContainer.insertAdjacentHTML("beforeend", questionHtml);
 
-    // Add event Listeners to the edit a delete buttons
+    // Add event Listeners to the edit and delete buttons
     const question = document.querySelector(`#question${count}`);
-    const star = question.querySelector('.fa-star')
-    star.addEventListener('click', ()=> {
-      star.classList.toggle('active')
-    })
     const edit = question.querySelector(`.edit`);
     edit.addEventListener("click", changeQuestion);
     const trash = question.querySelector(`.trash`);
+
+    // add event listener to the star button
+    const star = question.querySelector(".fa-star");
+    star.addEventListener("click", (e) => {
+      star.classList.toggle("active");
+      parentElement = e.target.parentElement.parentElement.parentElement;
+      parentElement.classList.toggle("topFaq");
+      updateFile();
+    });
+
     trash.addEventListener("click", (e) => {
       addModal(e, "question");
     });
@@ -113,10 +119,12 @@ function setQuestion(e) {
     }
     questionsLength();
   }
+  updateFile();
 }
 const modal = document.querySelector(".modalContainer");
 // Delete Question
 // ===============================================================================
+// this creates the pop up to ensure that nothing gets deleted by accident
 function addModal(e, type) {
   one.style.display = "none";
   two.style.display = "none";
@@ -133,9 +141,11 @@ function addModal(e, type) {
     </div>
   </div>
   `;
+  // selecting yes ot no value for the modal
   const yes = document.querySelector(".yes");
   const no = document.querySelector(".no");
 
+  // add event listener to fire the remove function if yes is slected
   yes.addEventListener("click", () => {
     remove(removedQuestion, type);
   });
@@ -154,6 +164,7 @@ function remove(removedQuestion, type) {
   const all = document.querySelectorAll(`.${type}`);
   let i = 0;
 
+  // this selects the remaining questions or news and re orders them
   all.forEach((unit) => {
     unit.id = `${type}${i}`;
     i++;
@@ -167,6 +178,7 @@ function remove(removedQuestion, type) {
   one.style.display = "block";
   two.style.display = "block";
   modal.innerHTML = "";
+  updateFile();
 }
 
 // Edit Question
@@ -224,7 +236,7 @@ function changeQuestion(e) {
 
 function editValue(id, e) {
   e.preventDefault();
-  // Checking if the input and text area fileds contain values that arent empty
+  // Checking if the input and text area fields contain values that arent empty
   const titleValue = form.querySelector(".title").value;
   const contentValue = form.querySelector(".content").value;
   if (titleValue === "") {
@@ -243,6 +255,7 @@ function editValue(id, e) {
     one.style.display = "block";
     two.style.display = "block";
   }
+  updateFile();
 }
 
 // Drag and drop Funcitonality
@@ -261,6 +274,7 @@ function drag(i) {
   value.forEach((value) => {
     value.addEventListener("dragend", () => {
       value.classList.remove("dragging");
+      updateFile()
     });
   });
 }
@@ -271,6 +285,7 @@ container.addEventListener("dragover", (e) => {
 
   const draggable = document.querySelector(".dragging");
 
+  // determining if we are dragging a news or question element
   const classList = [...draggable.classList];
   const i = classList.reduce((acc, val) => {
     if (val !== "dragging") {
@@ -279,6 +294,7 @@ container.addEventListener("dragover", (e) => {
     return acc;
   }, "");
 
+  // this is grabbing the element directly below the cursor
   const afterElement = getDragAfterElement(e.clientY, i);
 
   const container = cont[i + "Container"];
@@ -410,6 +426,7 @@ function setNews(e) {
     }
     newsLength();
   }
+  updateFile();
 }
 
 function changeNews(e) {
@@ -460,4 +477,44 @@ function changeNews(e) {
   edit.addEventListener("click", (e) => {
     editValue(id, e);
   });
+  updateFile();
+}
+
+// Creating an object to grab the data from the question and news columns, this is the main output Randolph :)
+function updateFile() {
+  // this grabs all the news elements and breaks it down into an object
+  const news = [...document.getElementsByClassName("news")];
+
+  const newsObject = news.reduce((acc, value) => {
+    const title = value.querySelector(".heading").textContent;
+    const body = value.querySelector(".content").textContent;
+    const object = {
+      title: title,
+      body: body,
+      type: "news",
+    };
+    acc.push(object);
+    return acc;
+  }, []);
+
+  console.log(newsObject);
+
+  // this grabs all the question elements and breaks it down into an object
+  const question = [...document.getElementsByClassName("question")];
+
+  const questionObject = question.reduce((acc, value) => {
+    const title = value.querySelector(".heading").textContent;
+    const body = value.querySelector(".content").textContent;
+    const preferred = value.classList.contains('topFaq')
+    const object = {
+      title: title,
+      body: body,
+      type: "question",
+      preferred: preferred
+    };
+    acc.push(object);
+    return acc;
+  }, []);
+
+  console.log(questionObject);
 }
