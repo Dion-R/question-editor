@@ -33,10 +33,13 @@ body {
 }
 .container {
     padding-top: 10rem;
-    max-width: 900px;
+    padding-bottom: 5rem;
+    max-width: 1300px;
     margin: 0 auto;
-    min-height: 500px;
     border-radius: 0.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
 }
 .question {
     background: white;
@@ -45,6 +48,7 @@ body {
     border-radius: 0.5rem;
     cursor: pointer;
     margin-bottom: 1rem;
+    cursor: move;
 }
 .title {
     margin-bottom: 0.5rem;
@@ -59,13 +63,18 @@ body {
     display: flex;
     align-items: center;
     font-size: 1rem;
+    justify-content: space-between;
+    gap: 0.8rem;
+    cursor: pointer;
+
 }
-.changers > i:nth-of-type(2) {
-    margin-left: 1rem;
+.trash {
     color: var(--pink);
+    cursor: pointer;
 }
-.changers > i:nth-of-type(1) {
+.edit {
     color: var(--turqoise);
+    cursor: pointer;
 }
 .addQuestion {
     background-color: white;
@@ -78,28 +87,38 @@ body {
 .addQuestion:hover {
     transform: scale(1.02);
 }
-.fa-plus {
-    font-size: 1.5rem;
-    color: var(--dark-blue);
-}
 #createQuestionForm {
      position: fixed;
-    top: 30%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 600px;
+    width: 900px;
 }
-#createQuestionForm > h2 {
-    text-align: center;
-    margin-bottom: 0.5rem;
-} 
+#createQuestionForm > div:nth-of-type(1){
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+#createQuestionForm > div:nth-of-type(1) i{
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: 0.1s;
+}
+#createQuestionForm > div:nth-of-type(1) i:hover{
+    transform: scale(1.1);
+}
+#createQuestionForm > div:nth-of-type(1) h2{
+   flex-grow: 1;
+   text-align: center;
+}
+
 #createQuestionForm > input:nth-of-type(1) {
 display: block;
 padding: 1rem;
 border:none;
 width: 100%;
 border-radius: 0.5rem;
-margin-bottom: 0.5rem;
+margin-bottom: 1rem;
 font-size: 1.17em;
  font-family: "Roboto", sans-serif;
 }
@@ -131,9 +150,105 @@ transform: scale(1.02);
     padding: 1rem;
     font-family: "Roboto", sans-serif;
     font-size: 1.17em;
-    min-height: 150px;
-    margin-bottom: 0.5rem;
+    min-height: 300px;
+    margin-bottom: 1rem;
 }
 #createQuestionForm > textarea:focus {
       outline: 3px solid var(--dark-blue);
+}
+.redAlert {
+    outline: 3px solid var(--pink);
+}
+
+.cont {
+    background-color: #333;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+.draggable {
+    padding: 1rem;
+    background-color: white;
+    background-color: 1px solid black;
+    margin-bottom: 2rem;
+    cursor: move;
+}
+.dragging {
+    opacity: 0.5;
+}
+.addNews {
+     background-color: white;
+    padding: 1rem;
+   text-align: center;
+   border-radius: 0.5rem;
+   transition: 0.1s;
+   cursor: pointer;
+}
+.addNews:hover {
+    transform: scale(1.02);
+}
+#createNewsForm {
+  position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 900px;
+}
+.news {
+     background: white;
+    padding: 1rem;
+    color: #54595F;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    cursor: move;
+}
+.modalContainer {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.modal {
+    height: 200px;
+    width: 500px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid var(--pink);
+    border-radius: 0.5rem;
+}
+.modal h1 {
+text-align: center;
+margin-bottom: 2rem;
+}
+.buttonContainer {
+    display: flex;
+    gap: 3rem;
+    justify-content: center;
+}
+.yes {
+    padding: 0.3rem 2rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    width: 110px;
+    text-align: center;
+}
+.yes:hover {
+    background-color: var(--pink);
+    color: white;
+}
+.no:hover {
+    background-color: var(--turqoise);
+    color: white;
+}
+.no {
+    padding: 0.3rem 2rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    width: 110px;
+    text-align: center;
+}
+.active {
+    color: #D3F531;
 }
